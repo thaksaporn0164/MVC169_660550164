@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1>ลงคะแนนสำหรับ {{ voter_id }}</h1>
+    {% if status == 'OPEN' %}
+    <form action="/vote/submit" method="POST">
+        <input type="hidden" name="voter_id" value="{{ voter_id }}">
+        
+        <label>อันดับ 1:</label>
+        <select name="rank1" required>
+            <option value="">-- เลือกผู้สมัคร --</option>
+            {% for c in candidates %}<option value="{{ c.id }}">{{ c.id }} - {{ c.name }}</option>{% endfor %}
+        </select><br><br>
+
+        <label>อันดับ 2:</label>
+        <select name="rank2" required>
+            <option value="">-- เลือกผู้สมัคร --</option>
+            {% for c in candidates %}<option value="{{ c.id }}">{{ c.id }} - {{ c.name }}</option>{% endfor %}
+        </select><br><br>
+
+        <label>อันดับ 3:</label>
+        <select name="rank3" required>
+            <option value="">-- เลือกผู้สมัคร --</option>
+            {% for c in candidates %}<option value="{{ c.id }}">{{ c.id }} - {{ c.name }}</option>{% endfor %}
+        </select><br><br>
+        
+        <button type="submit">ส่งบัตรลงคะแนน</button>
+    </form>
+    {% else %}
+    <p>ขณะนี้การเลือกตั้งไม่ได้อยู่ในสถานะเปิดรับคะแนน</p>
+    {% endif %}
+    <br><a href="/">กลับหน้าแรก</a>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1>{{ election.title }}</h1>
+    <hr>
+    
+    <h2>👤 เมนูผู้มีสิทธิ์เลือกตั้ง (Voters)</h2>
+    <ul>
+        <li><a href="/candidates">ดูรายชื่อผู้สมัคร</a></li>
+        <li><a href="/voter_login">ลงคะแนนจัดอันดับ</a></li>
+        <li><a href="/public_status">ดูสถานะและผลการเลือกตั้ง</a></li>
+    </ul>
+
+    <hr>
+    
+    <h2>🛡️ เมนูเจ้าหน้าที่ (Staff)</h2>
+    <ul>
+        <li><a href="/staff">แผงควบคุม (ปิดรับคะแนน / ตรวจกลุ่มบัตรซ้ำ)</a></li>
+    </ul>
+{% endblock %}

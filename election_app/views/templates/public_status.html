@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1>สถานะและผลการเลือกตั้ง</h1>
+    <p>สถานะปัจจุบัน: <strong>{{ election.status }}</strong></p>
+    <p>จำนวนผู้มาใช้สิทธิ์ (บัตรที่รับแล้ว): <strong>{{ stats.total_received }}</strong> ใบ</p>
+    <hr>
+
+    {% if election.status == 'FINALIZED' %}
+        <h2> ผลการเลือกตั้ง (อย่างเป็นทางการ)</h2>
+        <table border="1" cellpadding="5">
+            <tr><th>รหัสผู้สมัคร</th><th>ชื่อ</th><th>คะแนนรวม</th></tr>
+            {% for cid, cdata in scores.items() %}
+            <tr><td>{{ cid }}</td><td>{{ cdata.name }}</td><td>{{ cdata.score }}</td></tr>
+            {% endfor %}
+        </table>
+
+    {% elif election.status == 'CLOSED' %}
+        <p style="color: orange;"><i>กำลังอยู่ระหว่างการตรวจสอบความผิดปกติของบัตรโดยเจ้าหน้าที่ (รอประกาศผลสรุป)</i></p>
+        <h2> ผลคะแนนชั่วคราว (ยังไม่รวมกลุ่มที่รอตรวจสอบ)</h2>
+        <table border="1" cellpadding="5">
+            <tr><th>รหัสผู้สมัคร</th><th>ชื่อ</th><th>คะแนนชั่วคราว</th></tr>
+            {% for cid, cdata in scores.items() %}
+            <tr><td>{{ cid }}</td><td>{{ cdata.name }}</td><td>{{ cdata.score }}</td></tr>
+            {% endfor %}
+        </table>
+
+    {% else %}
+        <p style="color: gray;"><i>การเลือกตั้งกำลังเปิดรับคะแนน จะแสดงผลคะแนนเมื่อเจ้าหน้าที่ทำการปิดรับคะแนนแล้ว</i></p>
+    {% endif %}
+
+    <br><a href="/">กลับหน้าหลัก</a>
+{% endblock %}

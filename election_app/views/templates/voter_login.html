@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1>เลือกรหัสผู้มีสิทธิ์เพื่อเข้าคูหา</h1>
+    <p><i>(จำลองการ Login เข้าสู่ระบบ)</i></p>
+    <ul>
+        {% for v in voters %}
+            <li>
+                {{ v.id }} - {{ v.name }}
+                {% if v.active == 0 %}
+                    <span style="color:red;">(Inactive - ไม่มีสิทธิ์)</span>
+                {% elif v.has_voted == 1 %} 
+                    <span style="color:gray;">(ลงคะแนนแล้ว)</span> 
+                {% else %} 
+                    <a href="/vote/{{ v.id }}">เข้าคูหาลงคะแนน</a> 
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    <br><a href="/">กลับหน้าหลัก</a>
+{% endblock %}

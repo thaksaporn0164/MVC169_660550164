@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1>รายชื่อผู้สมัครรับเลือกตั้ง</h1>
+    <ul>
+        {% for c in candidates %}
+            <li><strong>รหัส:</strong> {{ c.id }} | <strong>ชื่อ:</strong> {{ c.name }}</li>
+        {% endfor %}
+    </ul>
+    <br><a href="/">กลับหน้าหลัก</a>
+{% endblock %}

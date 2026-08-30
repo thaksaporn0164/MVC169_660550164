@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1>แผงควบคุมเจ้าหน้าที่ (Staff Dashboard)</h1>
+    <h2>การเลือกตั้ง: {{ election.title }}</h2>
+    
+    <p>สถานะการเลือกตั้งปัจจุบัน: <strong>{{ status }}</strong></p>
+    <p>จำนวนบัตรที่รับแล้วทั้งหมด: <strong>{{ stats.total_received }}</strong> ใบ</p>
+
+    <hr>
+
+    {% if status == 'OPEN' %}
+        <h3>การจัดการการเลือกตั้ง</h3>
+        <form action="/staff/close" method="POST" onsubmit="return confirm('คุณแน่ใจหรือไม่ที่จะปิดรับคะแนน? เมื่อปิดแล้วจะไม่สามารถรับบัตรเพิ่มได้อีก');">
+            <button type="submit" style="background-color: red; color: white; padding: 10px; font-weight: bold; cursor: pointer;">
+                🛑 ปิดรับคะแนน (Close Voting)
+            </button>
+        </form>
+        <p style="color: gray;"><i>หมายเหตุ: การปิดรับคะแนนจะหยุดรับบัตรใหม่และเริ่มตรวจรูปแบบบัตรที่ซ้ำกันผิดสังเกตโดยอัตโนมัติ</i></p>
+    {% endif %}
+
+    {% if status == 'CLOSED' %}
+        <h3>กลุ่มบัตรที่รอตรวจสอบ (PENDING_REVIEW)</h3>
+        <ul>
+        {% for group in pending_groups %}
+            <li style="margin-bottom: 15px;">
+                <strong>รูปแบบ:</strong> {{ group.pattern_str }} | <strong>จำนวนบัตรในกลุ่ม:</strong> {{ group.ballot_count }} ใบ
+                <form action="/staff/review/{{ group.id }}" method="POST" style="display:inline; margin-left: 10px;">
+                    <button type="submit" name="decision" value="APPROVED" style="background-color: green; color: white; padding: 5px; cursor: pointer;">รับรอง (Approve)</button>
+                    <button type="submit" name="decision" value="REJECTED" style="background-color: darkred; color: white; padding: 5px; cursor: pointer;">ไม่นับ (Reject)</button>
+                </form>
+            </li>
+        {% else %}
+            <li style="color: green;">ไม่มีกลุ่มบัตรที่จัดรูปแบบซ้ำกันถึงเกณฑ์ที่ต้องตรวจสอบ</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if status != 'OPEN' %}
+        <hr>
+        <h3>📊 ผลคะแนน {% if status == 'CLOSED' %} (ชั่วคราว) {% else %} (สรุปผลอย่างเป็นทางการ) {% endif %}</h3>
+        {% if status == 'FINALIZED' %}
+            <p>
+                บัตรที่ได้รับการรับรองนับคะแนน (APPROVED): <strong>{{ stats.total_approved }}</strong> | 
+                บัตรที่ไม่นับ (REJECTED): <strong>{{ stats.total_rejected }}</strong>
+            </p>
+        {% endif %}
+        <table border="1" cellpadding="8" style="border-collapse: collapse; text-align: left;">
+            <tr style="background-color: #f2f2f2;">
+                <th>รหัสผู้สมัคร</th>
+                <th>ชื่อผู้สมัคร</th>
+                <th>คะแนน</th>
+            </tr>
+            {% for cid, cdata in scores.items() %}
+            <tr>
+                <td>{{ cid }}</td>
+                <td>{{ cdata.name }}</td>
+                <td><strong>{{ cdata.score }}</strong></td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <br><a href="/">กลับหน้าหลัก</a>
+{% endblock %}

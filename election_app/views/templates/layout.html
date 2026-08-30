@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Election System</title>
+</head>
+<body>
+    <div style="padding: 20px;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              {% if category=='danger' %}
+                <div style="border:1px solid black; padding: 10px; margin-bottom: 10px; color: red;">{{ message }}</div>
+              {% else %}
+                <div style="border:1px solid black; padding: 10px; margin-bottom: 10px; color: green;">{{ message }}</div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
