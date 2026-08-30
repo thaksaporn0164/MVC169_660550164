@@ -16,7 +16,7 @@ def dashboard():
     pending_groups = PatternGroupModel.get_all_pending() if status == 'CLOSED' else []
     
     # ส่งข้อลูมไปฟาView
-    return render_template(
+    return render_template( #ใส่เพื่อคอมมิตอีกรอบGitหายยยยย
         'staff_dashboard.html', 
         election=election, 
         status=status, 
